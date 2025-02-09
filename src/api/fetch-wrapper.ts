@@ -31,7 +31,6 @@ export async function fetchWrapper<
 				}
 			});
 		}
-		console.log({ url: url.toString() });
 		const response = await fetch(url.toString(), finalOptions);
 		if (!response.ok) {
 			const errorData = (await response.json()) as { message: string };
