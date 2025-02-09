@@ -1,9 +1,9 @@
 import './App.css';
+import CustomerBooking from './pages/customer-booking';
 
 function App() {
-	console.log('');
 
-	return <>This is an app</>;
+	return <CustomerBooking />;
 }
 
 export default App;
