@@ -15,7 +15,6 @@ $spacers: (
 );
 
 @each $key, $value in $spacers {
-	// Padding classes: .p-1, .px-1, .py-1 etc.
 	.p-#{$key} {
 		padding: $value;
 	}
@@ -27,6 +26,7 @@ $spacers: (
 		padding-top: $value;
 		padding-bottom: $value;
 	}
+
 	.pt-#{$key} {
 		padding-top: $value;
 	}
@@ -69,44 +69,51 @@ $spacers: (
 	}
 }
 
-.mx-auto {
-	margin-left: auto;
-	margin-right: auto;
+.fixed {
+	position: fixed;
 }
 
-.flex {
-	display: flex;
-}
-.fd-column {
-	flex-direction: column;
-}
-.grid {
-	display: grid;
+.inset-0 {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
 }
 
-.justify-between {
-	justify-content: space-between;
+.w-full {
+	width: 100%;
 }
 
-.ai-center {
+.w-11\/12 {
+	width: 91.666667%; // 11/12 of the width
+}
+
+.max-w-lg {
+	max-width: 32rem; // 512px
+}
+
+.h-screen {
+	height: 100vh;
+}
+
+.bg-black {
+	background-color: black;
+}
+
+.bg-opacity-50 {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.items-center {
 	align-items: center;
 }
 
-.as-center {
-	align-self: center;
+.justify-center {
+	justify-content: center;
 }
 
-.font-bold {
-	font-weight: 700;
-}
-
-.font-semibold {
-	font-weight: 600;
-}
-
-.text-xs {
-	font-size: 0.75rem;
-	line-height: 1rem;
+.content-center {
+	align-content: center;
 }
 
 .text-lg {
@@ -114,51 +121,12 @@ $spacers: (
 	line-height: 1.75rem;
 }
 
-.text-2xl {
-	font-size: 1.5rem;
-	line-height: 2rem;
-}
-
-.color-primary {
-	color: var(--primary-color);
-}
-
-.color-secondary {
-	color: var(--secondary-color);
+.font-semibold {
+	font-weight: 600;
 }
 
 .shadow-lg {
 	--tw-shadow:
 		0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-	--tw-shadow-colored:
-		0 10px 15px -3px var(--tw-shadow-color),
-		0 4px 6px -4px var(--tw-shadow-color);
-	box-shadow:
-		var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
-		var(--tw-shadow);
-}
-
-// reset css
-blockquote,
-dd,
-dl,
-figure,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-hr,
-p,
-pre {
-	margin: 0;
-}
-.visibility-hidden {
-	visibility: hidden;
-}
-
-.size-4 {
-	height: 1rem;
-	width: 1rem;
+	box-shadow: var(--tw-shadow);
 }

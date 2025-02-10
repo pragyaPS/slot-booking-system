@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { getSlots } from "../api/get-slots";
 import { Slot } from "../api/request-response-types";
+import SlotButton from "../components/slot-button";
 
 
 const CustomerBooking: React.FC = () => {
@@ -54,13 +55,14 @@ const CustomerBooking: React.FC = () => {
             {!loading && slots.length === 0 && <p>No slots available for this date. Please pick a date for 1st August 2024</p>}
             <div className="slots-container p-1">
                 {slots.map((slot) => (
-                    <button
-                        key={slot.id}
-                        className="slot-button"
-                        disabled={slot.isBooked === 'true'}
-                    >
-                        {new Date(slot.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </button>
+                    <SlotButton {...{ isBooked: slot.isBooked == "true", startDate: slot.startDate }} />
+                    // <button
+                    //     key={slot.id}
+                    //     className="slot-button"
+                    //     disabled={slot.isBooked === 'true'}
+                    // >
+                    //     {new Date(slot.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    // </button>
                 ))}
             </div>
         </div>
