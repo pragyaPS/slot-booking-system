@@ -31,7 +31,7 @@ export default function ManagerView() {
 	if (error) {
 		return (
 			<Card>
-				<CardContent>
+				<CardContent className="pt-6">
 					<div role="alert">{error}</div>
 				</CardContent>
 			</Card>

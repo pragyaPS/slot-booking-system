@@ -70,9 +70,9 @@ const CustomerBooking: React.FC = () => {
 			{isLoading && <div role="status">Loading available slots...</div>}
 
 			{error && (
-				<div role="alert" className="text-red-500">
-					{error}
-				</div>
+				<p role="alert" className="text-red-500 p-4">
+					Failed to load booking slots
+				</p>
 			)}
 			{selectedSlot && (
 				<BookingModal

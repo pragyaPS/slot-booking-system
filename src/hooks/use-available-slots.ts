@@ -22,7 +22,7 @@ export const useAvailableSlots = () => {
 					toast({
 						variant: 'destructive',
 						title: 'Error',
-						description: response.error?.message || 'Failed to fetch slots',
+						description: 'Failed to fetch slots',
 					});
 				}
 			} catch (err) {
@@ -31,7 +31,7 @@ export const useAvailableSlots = () => {
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: errorMessage,
+					description: 'Failed to fetch slots',
 				});
 			} finally {
 				setIsLoading(false);
