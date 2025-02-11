@@ -14,7 +14,7 @@ export interface ApiError {
 export interface Slot {
 	id: string;
 	startDate: string; // ISO format
-	isBooked: 'true' | 'false';
+	isBooked: boolean;
 	bookedCustomerName?: string;
 }
 
