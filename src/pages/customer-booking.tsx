@@ -1,71 +1,88 @@
-import { useCallback, useEffect, useState } from "react";
-import { getSlots } from "../api/get-slots";
-import { Slot } from "../api/request-response-types";
-import SlotButton from "../components/slot-button";
-
+import { useState } from 'react';
+import { Slot } from '../api/request-response-types';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { BookingModal } from '@/components/booking-modal/booking-modal';
+import { useNavigate } from 'react-router-dom';
+import { useAvailableSlots } from '@/hooks/use-available-slots';
+import { useBookSlot } from '@/hooks/use-book-slot';
+import { DatePicker } from '@/components/date-picker/date-picker';
+import { SlotGrid } from '@/components/booking-slots-grid/bookings-slot-grid';
 
 const CustomerBooking: React.FC = () => {
-    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]); // Default to today
-    const [slots, setSlots] = useState<Slot[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+	const navigate = useNavigate();
+	const [selectedDate, setSelectedDate] = useState<string>(
+		new Date().toISOString().split('T')[0]
+	); // Default to today
+	const [selectedSlot, setSelectedSlot] = useState<Slot>();
+	const [showModal, setShowModal] = useState(false);
+	const { slots, isLoading, error, fetchSlots } = useAvailableSlots();
+	const { handleBookSlot } = useBookSlot();
+	const [showSlots, setShowSlots] = useState(false);
 
-    const fetchSlots = async (date: string) => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await getSlots({ date, isBooked: 'false' });
-            if (response.success) {
-                setSlots(response.data || []);
-            } else {
-                setError(response.error?.message || 'Failed to fetch slots.');
-            }
-        } catch (err) {
-            setError((err as Error).message);
-        } finally {
-            setLoading(false);
-        }
-    };
+	const handleSlotSelect = (slot: Slot) => {
+		setSelectedSlot(slot);
+		if (slot.isBooked) {
+			navigate(`booking/${slot.id}`);
+		} else {
+			setShowModal(true);
+		}
+	};
 
-    useEffect(() => {
-        fetchSlots(selectedDate); // Fetch slots whenever selectedDate changes
-    }, [selectedDate]);
+	const handleBookingConfirm = async (customerName: string) => {
+		if (!selectedSlot) return;
 
-    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedDate(event.target.value); // Update selected date
-    };
+		const success = await handleBookSlot(selectedSlot.id, customerName);
+		if (success) {
+			setShowModal(false);
+		}
+	};
 
-    return (
-        <div className="booking-container">
-            <h1 className="p-1">Booking</h1>
-            <div>
-                <label htmlFor="date-picker">Date</label>
-                <input
-                    type="date"
-                    id="date-picker"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    className="date-picker"
-                />
-            </div>
+	const handleConfirmDate = async () => {
+		setShowSlots(true);
+		await fetchSlots(selectedDate);
+	};
 
-            <h3>Pick a Slot</h3>
-            {loading && <p>Loading slots...</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {!loading && slots.length === 0 && <p>No slots available for this date. Please pick a date for 1st August 2024</p>}
-            <div className="slots-container p-1">
-                {slots.map((slot) => (
-                    <SlotButton {...{ isBooked: slot.isBooked == "true", startDate: slot.startDate }} />
-                    // <button
-                    //     key={slot.id}
-                    //     className="slot-button"
-                    //     disabled={slot.isBooked === 'true'}
-                    // >
-                    //     {new Date(slot.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    // </button>
-                ))}
-            </div>
-        </div>
-    );
+	const handleDateChange = (date: string) => {
+		setSelectedDate(date);
+		setShowSlots(false); // Hide slots when date changes
+	};
+
+	return (
+		<Card>
+			<CardHeader>
+				<CardTitle>Booking</CardTitle>
+			</CardHeader>
+			<CardContent className="space-y-3">
+				<DatePicker
+					selectedDate={selectedDate}
+					onChange={handleDateChange}
+					onConfirm={handleConfirmDate}
+					isLoading={isLoading}
+				/>
+				{!isLoading && !error && showSlots && (
+					<div className="space-y-2">
+						<label className="text-sm font-medium">Pick a slot</label>
+						{/* we could have component level error boundary here */}
+						<SlotGrid slots={slots} onSlotSelect={handleSlotSelect} />
+					</div>
+				)}
+			</CardContent>
+			{isLoading && <div role="status">Loading available slots...</div>}
+
+			{error && (
+				<div role="alert" className="text-red-500">
+					{error}
+				</div>
+			)}
+			{selectedSlot && (
+				<BookingModal
+					open={showModal}
+					onClose={() => setShowModal(false)}
+					onConfirm={handleBookingConfirm}
+					slot={selectedSlot}
+				/>
+			)}
+		</Card>
+	);
 };
 export default CustomerBooking;

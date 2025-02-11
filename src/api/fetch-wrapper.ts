@@ -27,7 +27,7 @@ export async function fetchWrapper<
 		if (params) {
 			Object.entries(params).forEach(([key, value]) => {
 				if (value !== undefined) {
-					url.searchParams.append(key, String(value));
+					url.searchParams.append(key, (value as string).toString());
 				}
 			});
 		}
