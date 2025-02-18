@@ -8,12 +8,7 @@ interface DatePickerProps {
 	isLoading: boolean;
 }
 
-export const DatePicker = ({
-	selectedDate,
-	onChange,
-	isLoading,
-	onConfirm,
-}: DatePickerProps) => {
+export const DatePicker = ({ selectedDate, onChange, isLoading, onConfirm }: DatePickerProps) => {
 	return (
 		<div className="space-y-2">
 			<label htmlFor="date-picker" className="text-sm font-medium">
@@ -25,7 +20,6 @@ export const DatePicker = ({
 				value={selectedDate}
 				onChange={(e) => onChange(e.target.value)}
 				className="date-picker"
-				min={new Date().toISOString().split('T')[0]}
 				aria-label="Select date for booking"
 			/>
 			<Button onClick={onConfirm} disabled={isLoading || !selectedDate}>
